@@ -1,16 +1,13 @@
 import { StyleSheet, Text, View } from "react-native"
 
 import { THEME } from "@/src/shared/styles/theme"
-import { useAuthStore } from "@/src/features/auth/store/useAuthStore"
 
-export default function HomeScreen() {
-  const { user } = useAuthStore()
-
+export default function ExploreScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Olá, {user?.name ?? "usuário"} 👋</Text>
+      <Text style={styles.title}>Explorar</Text>
       <Text style={styles.subtitle}>
-        Bem-vindo ao Smart Forms.
+        Aqui vamos listar formulários públicos.
       </Text>
     </View>
   )
@@ -21,7 +18,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: THEME.colors.background,
     padding: 24,
-    justifyContent: "center",
   },
   title: {
     ...THEME.fonts.title,

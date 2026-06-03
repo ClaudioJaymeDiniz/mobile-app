@@ -1,42 +1,89 @@
-import { forwardRef } from 'react';
-import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { ReactNode } from "react"
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from "react-native"
 
-type ButtonProps = {
-  title?: string;
-} & TouchableOpacityProps;
+import { THEME } from "@/src/shared/styles/theme"
 
-export const Button = forwardRef<View, ButtonProps>(({ title, ...touchableProps }, ref) => {
+type ButtonProps = TouchableOpacityProps & {
+  title: string
+  loading?: boolean
+  variant?: "primary" | "danger" | "outline"
+  icon?: ReactNode
+}
+
+export function Button({
+  title,
+  loading = false,
+  variant = "primary",
+  icon,
+  disabled,
+  style,
+  ...props
+}: ButtonProps) {
+  const isDisabled = disabled || loading
+
   return (
-    <TouchableOpacity ref={ref} {...touchableProps} style={[styles.button, touchableProps.style]}>
-      <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity
+      {...props}
+      disabled={isDisabled}
+      style={[
+        styles.button,
+        styles[variant],
+        isDisabled && styles.disabled,
+        style,
+      ]}
+    >
+      {loading ? (
+        <ActivityIndicator color={variant === "outline" ? THEME.colors.primary : "#FFF"} />
+      ) : (
+        <>
+          {icon}
+          <Text
+            style={[
+              styles.text,
+              variant === "outline" && styles.outlineText,
+            ]}
+          >
+            {title}
+          </Text>
+        </>
+      )}
     </TouchableOpacity>
-  );
-});
-
-Button.displayName = 'Button';
+  )
+}
 
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'center',
-    backgroundColor: '#6366F1',
-    borderRadius: 24,
-    elevation: 5,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginHorizontal: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      height: 2,
-      width: 0,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    height: 54,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: 8,
   },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
+  primary: {
+    backgroundColor: THEME.colors.primary,
   },
-});
+  danger: {
+    backgroundColor: THEME.colors.error,
+  },
+  outline: {
+    backgroundColor: THEME.colors.surface,
+    borderWidth: 1,
+    borderColor: THEME.colors.border,
+  },
+  disabled: {
+    opacity: 0.7,
+  },
+  text: {
+    ...THEME.fonts.button,
+  },
+  outlineText: {
+    color: THEME.colors.primary,
+  },
+})

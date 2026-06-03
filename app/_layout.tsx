@@ -16,8 +16,9 @@ import {
   Manrope_600SemiBold,
 } from "@expo-google-fonts/manrope"
 
-import { useAuthStore } from "@/src/features/auth/store/useAuthStore"
+import { useAuthStore } from "@/src/store/useAuthStore"
 import { THEME } from "@/src/shared/styles/theme"
+import { runMigrations } from "@/src/services/database/migrations"
 
 SplashScreen.preventAutoHideAsync()
 
@@ -41,6 +42,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     loadSession()
+    runMigrations()
   }, [loadSession])
 
   useEffect(() => {

@@ -30,3 +30,11 @@ export async function getMe() {
   const response = await api.get<User>("/auth/me")
   return response.data
 }
+
+export async function recoverPassword(email: string) {
+  const response = await api.post("/auth/recover-password", {
+    email,
+  })
+
+  return response.data
+}
